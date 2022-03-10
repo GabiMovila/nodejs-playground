@@ -1,0 +1,27 @@
+{
+  "name": "nodejs-playground",
+  "version": "1.0.0",
+  "description": "* Node",
+  "main": "app.js",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "jest": "^27.5.1"
+  },
+  "devDependencies": {
+    "supertest": "^6.2.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabiMovila/nodejs-playground.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GabiMovila/nodejs-playground/issues"
+  },
+  "homepage": "https://github.com/GabiMovila/nodejs-playground#readme"
+}
