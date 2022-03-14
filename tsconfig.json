@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "./built",
+    "allowJs": true,
+    "module": "CommonJS",
+    "watch": false
+  },
+  "include": ["./"]
+}
