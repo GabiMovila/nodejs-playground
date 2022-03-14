@@ -9,4 +9,4 @@ RUN npm install --production
 
 COPY . .
 
-CMD [ "node", "app.js" ]
+CMD [ "node", "server.js" ]
