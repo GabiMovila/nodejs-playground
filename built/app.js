@@ -39,33 +39,19 @@ exports.__esModule = true;
 var axios_1 = require("axios");
 var express = require("express");
 var app = express();
-app.get("/hello", function (req, res) {
-    res.send("Hello world!");
-});
-app.get("/api", function (req, res) {
-    axios_1["default"].get("https://www.boredapi.com/api/activity").then(function (response) {
-        console.log("Entered then on app.js");
-        res.send(response.data.activity);
-    });
-});
-var caca = 1;
-app.get("/api2", function (req, res) {
-    getData(res);
-});
 var getData = function (res) { return __awaiter(void 0, void 0, void 0, function () {
     var response, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, axios_1["default"].get("https://www.boredapi.com/api/activity")];
+                return [4 /*yield*/, axios_1["default"].get('https://www.boredapi.com/api/activity')];
             case 1:
                 response = _a.sent();
                 res.send(response.data.activity);
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
-                console.error(error_1);
                 res.status(500);
                 res.send(error_1.message);
                 return [3 /*break*/, 3];
@@ -73,4 +59,15 @@ var getData = function (res) { return __awaiter(void 0, void 0, void 0, function
         }
     });
 }); };
+app.get('/hello', function (req, res) {
+    res.send('Hello world!');
+});
+app.get('/api', function (req, res) {
+    axios_1["default"].get('https://www.boredapi.com/api/activity').then(function (response) {
+        res.send(response.data.activity);
+    });
+});
+app.get('/api2', function (req, res) {
+    getData(res);
+});
 exports["default"] = app;

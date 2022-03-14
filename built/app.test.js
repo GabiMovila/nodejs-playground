@@ -37,43 +37,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var axios_1 = require("axios");
-var app_1 = require("./app");
 var supertest = require("supertest");
 var globals_1 = require("@jest/globals");
+var app_1 = require("./app");
 var request = supertest(app_1["default"]);
-globals_1.jest.mock("axios");
-var mockedAxios = axios_1["default"];
-//ts-jest
-describe("/api endpoint tests", function () {
-    it("should fetch the mocked message", function () { return __awaiter(void 0, void 0, void 0, function () {
+globals_1.jest.mock('axios');
+describe('/api endpoint tests', function () {
+    var mockedAxios;
+    beforeEach(function () {
+        mockedAxios = globals_1.jest.spyOn(axios_1["default"], 'get');
+    });
+    afterEach(function () {
+        mockedAxios.mockRestore();
+    });
+    it('should fetch the mocked message', function () { return __awaiter(void 0, void 0, void 0, function () {
         var resp, actual;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    resp = { data: { activity: "Do Something" } };
-                    mockedAxios.get.mockResolvedValueOnce(resp);
-                    return [4 /*yield*/, request.get("/api2")];
+                    resp = { data: { activity: 'Do Something' } };
+                    mockedAxios.mockResolvedValueOnce(resp);
+                    return [4 /*yield*/, request.get('/api2')];
                 case 1:
                     actual = _a.sent();
                     (0, globals_1.expect)(actual.text).toEqual(resp.data.activity);
-                    (0, globals_1.expect)(mockedAxios.get).toHaveBeenCalledWith("https://www.boredapi.com/api/activity");
+                    (0, globals_1.expect)(mockedAxios).toHaveBeenCalledWith('https://www.boredapi.com/api/activity');
                     return [2 /*return*/];
             }
         });
     }); });
-    it("should not fetch anything", function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('should not fetch anything', function () { return __awaiter(void 0, void 0, void 0, function () {
         var message, actual;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    message = "Something went wrong";
-                    mockedAxios.get.mockRejectedValueOnce(new Error(message));
-                    return [4 /*yield*/, request.get("/api2")];
+                    message = 'Something went wrong';
+                    mockedAxios.mockRejectedValueOnce(new Error(message));
+                    return [4 /*yield*/, request.get('/api2')];
                 case 1:
                     actual = _a.sent();
                     (0, globals_1.expect)(actual.text).toEqual(message);
                     (0, globals_1.expect)(actual.statusCode).toEqual(500);
-                    (0, globals_1.expect)(mockedAxios.get).toHaveBeenCalledWith("https://www.boredapi.com/api/activity");
+                    (0, globals_1.expect)(mockedAxios).toHaveBeenCalledWith('https://www.boredapi.com/api/activity');
                     return [2 /*return*/];
             }
         });
