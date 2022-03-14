@@ -43,6 +43,7 @@ var globals_1 = require("@jest/globals");
 var request = supertest(app_1["default"]);
 globals_1.jest.mock("axios");
 var mockedAxios = axios_1["default"];
+//ts-jest
 describe("/api endpoint tests", function () {
     it("should fetch the mocked message", function () { return __awaiter(void 0, void 0, void 0, function () {
         var resp, actual;

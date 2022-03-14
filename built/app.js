@@ -48,6 +48,7 @@ app.get("/api", function (req, res) {
         res.send(response.data.activity);
     });
 });
+var caca = 1;
 app.get("/api2", function (req, res) {
     getData(res);
 });
