@@ -45,15 +45,16 @@ var getData = function (res) { return __awaiter(void 0, void 0, void 0, function
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, axios_1["default"].get('https://www.boredapi.com/api/activit')];
+                return [4 /*yield*/, axios_1["default"].get('https://www.boredapi.com/api/activity')];
             case 1:
                 response = _a.sent();
-                res.send(response.data);
+                console.log(response);
+                res.send(response.data.activity);
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
                 res.status(500);
-                res.send(error_1);
+                res.send(error_1.message);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -63,10 +64,8 @@ app.get('/hello', function (req, res) {
     res.send('Hello world!');
 });
 app.get('/api', function (req, res) {
-    axios_1["default"]
-        .get('https://www.boredapi.com/api/activity')
-        .then(function (response) {
-        res.send(response.data);
+    axios_1["default"].get('https://www.boredapi.com/api/activity').then(function (response) {
+        res.send(response.data.activity);
     });
 });
 app.get('/api2', function (req, res) {

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import * as supertest from 'supertest';
 import { expect, jest } from '@jest/globals';
-import app from './app';
+import app from '../src/app';
+import Response from '../src/response';
 
 const request = supertest(app);
 
@@ -18,7 +19,13 @@ describe('/api endpoint tests', () => {
   });
 
   it('should fetch the mocked message', async () => {
-    const resp = { data: { activity: 'Do Something' } };
+    const resp: Response = {
+      data: { activity: 'Do Something' },
+      status: 200,
+      statusText: 'Ok',
+      headers: {},
+      config: {},
+    };
     mockedAxios.mockResolvedValueOnce(resp);
     const actual = await request.get('/api2');
     expect(actual.text).toEqual(resp.data.activity);

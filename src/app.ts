@@ -1,15 +1,18 @@
 import axios from 'axios';
 import * as express from 'express';
+import Response from './response';
 
 const app = express();
 
 const getData = async (res) => {
   try {
-    const response = await axios.get('https://www.boredapi.com/api/activity');
-    res.send(response.data.activity);
+    const response: Response = await axios.get(
+      'https://www.boredapi.com/api/activit'
+    );
+    res.send(response.data);
   } catch (error) {
     res.status(500);
-    res.send(error.message);
+    res.send(error);
   }
 };
 
@@ -18,9 +21,11 @@ app.get('/hello', (req, res) => {
 });
 
 app.get('/api', (req, res) => {
-  axios.get('https://www.boredapi.com/api/activity').then((response) => {
-    res.send(response.data.activity);
-  });
+  axios
+    .get('https://www.boredapi.com/api/activity')
+    .then((response: Response) => {
+      res.send(response.data);
+    });
 });
 
 app.get('/api2', (req, res) => {
