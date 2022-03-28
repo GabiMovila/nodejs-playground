@@ -1,7 +1,9 @@
-export default interface Response {
-  status: number;
-  statusText: string;
-  headers: object;
-  config: object;
-  data: object;
+export default interface CustomResponse {
+  activity: string;
+  type: string;
+  participants: number;
+  price: number;
+  link: string;
+  key: string;
+  accessibility: number;
 }

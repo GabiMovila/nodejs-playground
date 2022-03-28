@@ -40,7 +40,7 @@ var axios_1 = require("axios");
 var express = require("express");
 var app = express();
 var getData = function (res) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, error_1;
+    var response, typedResponse, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -48,8 +48,8 @@ var getData = function (res) { return __awaiter(void 0, void 0, void 0, function
                 return [4 /*yield*/, axios_1["default"].get('https://www.boredapi.com/api/activity')];
             case 1:
                 response = _a.sent();
-                console.log(response);
-                res.send(response.data.activity);
+                typedResponse = response.data;
+                res.send(typedResponse);
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
@@ -64,8 +64,14 @@ app.get('/hello', function (req, res) {
     res.send('Hello world!');
 });
 app.get('/api', function (req, res) {
-    axios_1["default"].get('https://www.boredapi.com/api/activity').then(function (response) {
-        res.send(response.data.activity);
+    axios_1["default"]
+        .get('https://www.boredapi.com/api/activity')
+        .then(function (response) {
+        var typedResponse = response.data;
+        res.send(typedResponse);
+    })["catch"](function (error) {
+        res.status(500);
+        res.send(error.message);
     });
 });
 app.get('/api2', function (req, res) {

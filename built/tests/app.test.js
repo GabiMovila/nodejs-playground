@@ -37,39 +37,56 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var axios_1 = require("axios");
-var express = require("express");
-var app = express();
-var getData = function (res) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, axios_1["default"].get('https://www.boredapi.com/api/activit')];
-            case 1:
-                response = _a.sent();
-                res.send(response.data);
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                res.status(500);
-                res.send(error_1);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
+var supertest = require("supertest");
+var globals_1 = require("@jest/globals");
+var app_1 = require("../src/app");
+var request = supertest(app_1["default"]);
+globals_1.jest.mock('axios');
+describe('/api endpoint tests', function () {
+    var mockedAxios;
+    beforeEach(function () {
+        mockedAxios = globals_1.jest.spyOn(axios_1["default"], 'get');
     });
-}); };
-app.get('/hello', function (req, res) {
-    res.send('Hello world!');
-});
-app.get('/api', function (req, res) {
-    axios_1["default"]
-        .get('https://www.boredapi.com/api/activity')
-        .then(function (response) {
-        res.send(response.data);
+    afterEach(function () {
+        mockedAxios.mockRestore();
     });
+    it('should fetch the mocked message', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var resp, actual;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    resp = {
+                        data: { activity: 'Do Something' },
+                        status: 200,
+                        statusText: 'Ok',
+                        headers: {},
+                        config: {}
+                    };
+                    mockedAxios.mockResolvedValueOnce(resp);
+                    return [4 /*yield*/, request.get('/api2')];
+                case 1:
+                    actual = _a.sent();
+                    (0, globals_1.expect)(actual.body.activity).toEqual(resp.data.activity);
+                    (0, globals_1.expect)(mockedAxios).toHaveBeenCalledWith('https://www.boredapi.com/api/activity');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should not fetch anything', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var message, actual;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    message = 'Something went wrong';
+                    mockedAxios.mockRejectedValueOnce(new Error(message));
+                    return [4 /*yield*/, request.get('/api2')];
+                case 1:
+                    actual = _a.sent();
+                    (0, globals_1.expect)(actual.text).toEqual(message);
+                    (0, globals_1.expect)(actual.statusCode).toEqual(500);
+                    (0, globals_1.expect)(mockedAxios).toHaveBeenCalledWith('https://www.boredapi.com/api/activity');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
-app.get('/api2', function (req, res) {
-    getData(res);
-});
-exports["default"] = app;

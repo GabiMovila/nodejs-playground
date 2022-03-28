@@ -1,8 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import * as supertest from 'supertest';
 import { expect, jest } from '@jest/globals';
 import app from '../src/app';
-import Response from '../src/response';
 
 const request = supertest(app);
 
@@ -19,7 +18,7 @@ describe('/api endpoint tests', () => {
   });
 
   it('should fetch the mocked message', async () => {
-    const resp: Response = {
+    const resp: AxiosResponse = {
       data: { activity: 'Do Something' },
       status: 200,
       statusText: 'Ok',
@@ -28,7 +27,7 @@ describe('/api endpoint tests', () => {
     };
     mockedAxios.mockResolvedValueOnce(resp);
     const actual = await request.get('/api2');
-    expect(actual.text).toEqual(resp.data.activity);
+    expect(actual.body.activity).toEqual(resp.data.activity);
     expect(mockedAxios).toHaveBeenCalledWith(
       'https://www.boredapi.com/api/activity'
     );
