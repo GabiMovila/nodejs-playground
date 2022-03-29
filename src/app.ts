@@ -3,7 +3,7 @@ import * as express from 'express';
 import CustomResponse from './response';
 const app = express();
 
-const getData = async (res) => {
+const getData = async (res: express.Response) => {
   try {
     const response: AxiosResponse = await axios.get(
       'https://www.boredapi.com/api/activity'
@@ -16,11 +16,11 @@ const getData = async (res) => {
   }
 };
 
-app.get('/hello', (req, res) => {
+app.get('/hello', (req, res: express.Response) => {
   res.send('Hello world!');
 });
 
-app.get('/api', (req, res) => {
+app.get('/api', (req, res: express.Response) => {
   axios
     .get('https://www.boredapi.com/api/activity')
     .then((response: AxiosResponse) => {
@@ -33,7 +33,7 @@ app.get('/api', (req, res) => {
     });
 });
 
-app.get('/api2', (req, res) => {
+app.get('/api2', (req, res: express.Response) => {
   getData(res);
 });
 
