@@ -37,44 +37,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var axios_1 = require("axios");
-var app_1 = require("./app");
-var supertest = require("supertest");
-var globals_1 = require("@jest/globals");
-var request = supertest(app_1["default"]);
-globals_1.jest.mock("axios");
-var mockedAxios = axios_1["default"];
-describe("/api endpoint tests", function () {
-    it("should fetch the mocked message", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var resp, actual;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    resp = { data: { activity: "Do Something" } };
-                    mockedAxios.get.mockResolvedValueOnce(resp);
-                    return [4 /*yield*/, request.get("/api2")];
-                case 1:
-                    actual = _a.sent();
-                    (0, globals_1.expect)(actual.text).toEqual(resp.data.activity);
-                    (0, globals_1.expect)(mockedAxios.get).toHaveBeenCalledWith("https://www.boredapi.com/api/activity");
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it("should not fetch anything", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var message, actual;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    message = "Something went wrong";
-                    mockedAxios.get.mockRejectedValueOnce(new Error(message));
-                    return [4 /*yield*/, request.get("/api2")];
-                case 1:
-                    actual = _a.sent();
-                    (0, globals_1.expect)(actual.text).toEqual(message);
-                    (0, globals_1.expect)(actual.statusCode).toEqual(500);
-                    (0, globals_1.expect)(mockedAxios.get).toHaveBeenCalledWith("https://www.boredapi.com/api/activity");
-                    return [2 /*return*/];
-            }
-        });
-    }); });
+var express = require("express");
+var app = express();
+var getData = function (res) { return __awaiter(void 0, void 0, void 0, function () {
+    var response, typedResponse, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, axios_1["default"].get('https://www.boredapi.com/api/activity')];
+            case 1:
+                response = _a.sent();
+                typedResponse = response.data;
+                res.send(typedResponse);
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                res.status(500);
+                res.send(error_1.message);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+app.get('/hello', function (req, res) {
+    res.send('Hello world!');
 });
+app.get('/api', function (req, res) {
+    axios_1["default"]
+        .get('https://www.boredapi.com/api/activity')
+        .then(function (response) {
+        var typedResponse = response.data;
+        res.send(typedResponse);
+    })["catch"](function (error) {
+        res.status(500);
+        res.send(error.message);
+    });
+});
+app.get('/api2', function (req, res) {
+    getData(res);
+});
+exports["default"] = app;
