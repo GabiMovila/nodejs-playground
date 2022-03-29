@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
 import * as express from 'express';
 import CustomResponse from './response';
-//import cors from 'cors';
+import * as cors from 'cors';
 
 const app = express();
-//app.use(cors);
+app.use(cors());
 
 async function getData(res: express.Response) {
   try {

@@ -38,9 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var axios_1 = require("axios");
 var express = require("express");
-//import cors from 'cors';
+var cors = require("cors");
 var app = express();
-//app.use(cors);
+app.use(cors());
 function getData(res) {
     return __awaiter(this, void 0, void 0, function () {
         var response, typedResponse, error_1;
