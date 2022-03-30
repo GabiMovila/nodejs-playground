@@ -27,8 +27,9 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc -p tsconfig.json && node ./built/src/server.js",
-    "start": "node ./built/src/server.js"
+    "build": "tsc -p tsconfig.json",
+    "start": "node ./built/src/server.js",
+    "deploy": "tsc -p tsconfig.json && node ./built/src/server.js"
   },
   "repository": {
     "type": "git",

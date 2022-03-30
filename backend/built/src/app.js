@@ -40,7 +40,11 @@ var axios_1 = require("axios");
 var express = require("express");
 var cors = require("cors");
 var app = express();
-app.use(cors());
+var allowedOrigins = ['http://localhost:3000'];
+var options = {
+    origin: allowedOrigins
+};
+app.use(cors(options));
 function getData(res) {
     return __awaiter(this, void 0, void 0, function () {
         var response, typedResponse, error_1;

@@ -4,7 +4,12 @@ import CustomResponse from './response';
 import * as cors from 'cors';
 
 const app = express();
-app.use(cors());
+const allowedOrigins = ['http://localhost:3000'];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins,
+};
+app.use(cors(options));
 
 async function getData(res: express.Response) {
   try {
