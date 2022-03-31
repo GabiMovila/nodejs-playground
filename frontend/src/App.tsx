@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
   const [data, setData] = React.useState(null);
+  const [error, setError] = React.useState(null);
 
-  React.useEffect(() => {
+  const getData = () => {
     fetch('http://localhost:8080/api')
       .then((res) => res.json())
       .then((data) => {
         setData(data);
+      })
+      .catch((error) => {
+        setError(error);
       });
-  }, []);
+  };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <div>
-          {!data ? 'Loading...' : <pre>{JSON.stringify(data, null, 2)}</pre>}
-        </div>
-      </header>
+    <div>
+      <button onClick={getData} data-testid="refreshButton">
+        Refresh
+      </button>
+      {error && 'Error: ' + error}
+      {data && (
+        <pre data-testid="dataBlock">{JSON.stringify(data, null, 2)}</pre>
+      )}
     </div>
   );
 }
