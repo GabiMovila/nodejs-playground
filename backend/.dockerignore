@@ -1,0 +1,5 @@
+#we ignore everything and then re-include only built/src folder that we need and package.json
+*
+!built/src
+!package.json
+!package-lock.json

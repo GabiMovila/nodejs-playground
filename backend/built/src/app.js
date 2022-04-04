@@ -38,29 +38,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var axios_1 = require("axios");
 var express = require("express");
+var cors = require("cors");
 var app = express();
-var getData = function (res) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, typedResponse, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, axios_1["default"].get('https://www.boredapi.com/api/activity')];
-            case 1:
-                response = _a.sent();
-                typedResponse = response.data;
-                res.send(typedResponse);
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                res.status(500);
-                res.send(error_1.message);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
+var allowedOrigins = ['http://localhost:3000'];
+var options = {
+    origin: allowedOrigins
+};
+app.use(cors(options));
+function getData(res) {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, typedResponse, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, axios_1["default"].get('https://www.boredapi.com/api/activity')];
+                case 1:
+                    response = _a.sent();
+                    typedResponse = response.data;
+                    res.send(typedResponse);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    res.status(500);
+                    res.send(error_1.message);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
     });
-}); };
-app.get('/hello', function (req, res) {
+}
+app.get('/hello', function (req, res, next) {
     res.send('Hello world!');
 });
 app.get('/api', function (req, res) {

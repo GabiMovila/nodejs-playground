@@ -1,9 +1,17 @@
 import axios, { AxiosResponse } from 'axios';
 import * as express from 'express';
 import CustomResponse from './response';
-const app = express();
+import * as cors from 'cors';
 
-const getData = async (res: express.Response) => {
+const app = express();
+const allowedOrigins = ['http://localhost:3000'];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins,
+};
+app.use(cors(options));
+
+async function getData(res: express.Response) {
   try {
     const response: AxiosResponse = await axios.get(
       'https://www.boredapi.com/api/activity'
@@ -14,9 +22,9 @@ const getData = async (res: express.Response) => {
     res.status(500);
     res.send(error.message);
   }
-};
+}
 
-app.get('/hello', (req, res: express.Response) => {
+app.get('/hello', (req, res: express.Response, next) => {
   res.send('Hello world!');
 });
 
