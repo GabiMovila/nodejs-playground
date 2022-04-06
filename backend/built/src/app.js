@@ -39,8 +39,12 @@ exports.__esModule = true;
 var axios_1 = require("axios");
 var express = require("express");
 var cors = require("cors");
+var mongodb_1 = require("mongodb");
+var mongoose = require("mongoose");
+require("dotenv/config");
 var app = express();
 var allowedOrigins = ['http://localhost:3000'];
+var dbConnectionString = "mongodb://".concat(process.env.DB_USERNAME, ":").concat(process.env.DB_PASSWORD, "@localhost:27017");
 var options = {
     origin: allowedOrigins
 };
@@ -85,4 +89,40 @@ app.get('/api', function (req, res) {
 app.get('/api2', function (req, res) {
     getData(res);
 });
+app.get('/mongodb', function (req, res) {
+    inputData();
+    res.send('1 kitty inserted');
+});
+app.get('/mongodb2', function (req, res) {
+    inputDataWithMongoose();
+    res.send('1 kitty inserted');
+});
+function inputData() {
+    mongodb_1.MongoClient.connect(dbConnectionString, function (err, db) {
+        var dbo = db.db('node-app-db');
+        var catoToBeInserted = { name: 'Jessie', color: 'orange' };
+        dbo.collection('Cats').insertOne(catoToBeInserted, function (err, res) {
+            if (err)
+                throw err;
+            console.log('1 kitty inserted');
+            db.close();
+        });
+    });
+}
+var kittySchema = new mongoose.Schema({
+    name: String
+});
+function inputDataWithMongoose() {
+    mongoose.connect(dbConnectionString);
+    kittySchema.methods.speak = function speak() {
+        var greeting = this.name
+            ? 'Meow name is ' + this.name
+            : "I don't have a name";
+        console.log(greeting);
+    };
+    var Kitten = mongoose.model('Kitten', kittySchema);
+    var kitty = new Kitten({ name: 'Tessie' });
+    kitty.speak();
+    kitty.save();
+}
 exports["default"] = app;
