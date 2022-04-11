@@ -1,34 +1,44 @@
 import * as express from 'express';
 import Fact from '../models/fact';
+import * as asyncHandler from 'express-async-handler';
 
-const getCatFacts = async (req: express.Request, res: express.Response) => {
-  try {
+const getCatFacts = asyncHandler(
+  async (req: express.Request, res: express.Response) => {
     const facts = await Fact.find();
     res.send(facts);
-  } catch (err) {
-    console.log(err);
-    res.status(500);
-    res.send(`Something went wrong`);
   }
-};
+);
 
-const postCatFact = async (req: express.Request, res: express.Response) => {
-  try {
+const postCatFact = asyncHandler(
+  async (req: express.Request, res: express.Response) => {
     const fact = new Fact(req.body);
     fact.save();
     res.send(`1 cat fact insterted: ${fact}`);
-  } catch (err) {
-    console.log(err);
-    res.status(500);
-    res.send(`Something went wrong`);
   }
-};
-const updateCatFact = (req: express.Request, res: express.Response) => {
-  const dummy = 2;
-};
+);
 
-const deleteCatFact = (req: express.Request, res: express.Response) => {
-  const dummy = 2;
-};
+const updateCatFact = asyncHandler(
+  async (req: express.Request, res: express.Response) => {
+    const fact = await Fact.findById(req.params.id);
+    if (!fact) {
+      res.status(404);
+      throw new Error('Fact not found');
+    }
+    await Fact.findByIdAndUpdate(req.params.id, req.body);
+    res.send(`1 cat fact updated: ${req.body}`);
+  }
+);
+
+const deleteCatFact = asyncHandler(
+  async (req: express.Request, res: express.Response) => {
+    const fact = await Fact.findById(req.params.id);
+    if (!fact) {
+      res.status(404);
+      throw new Error('Fact not found');
+    }
+    await Fact.findByIdAndDelete(req.params.id);
+    res.send(`Deleted fact with ID: ${req.params.id}`);
+  }
+);
 
 export { postCatFact, getCatFacts, updateCatFact, deleteCatFact };

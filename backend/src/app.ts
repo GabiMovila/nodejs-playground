@@ -3,6 +3,8 @@ import * as cors from 'cors';
 import 'dotenv/config';
 import * as bodyParser from 'body-parser';
 import connectToDB from './config/db';
+import router from './routes/factRoutes';
+import errorHandler from './middleware/errorHandler';
 
 connectToDB();
 
@@ -15,8 +17,8 @@ const options: cors.CorsOptions = {
 app.use(cors(options));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use('/api/facts', require('./routes/factRoutes'));
+app.use(errorHandler);
+app.use('/api/facts', router);
 //truthy
 
 export default app;

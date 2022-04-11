@@ -16,4 +16,4 @@ router.put('/:id', updateCatFact);
 
 router.delete('/:id', deleteCatFact);
 
-module.exports = router;
+export default router;
