@@ -17,8 +17,8 @@ const options: cors.CorsOptions = {
 app.use(cors(options));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(errorHandler);
+
 app.use('/api/facts', router);
-//truthy
+app.use(errorHandler);
 
 export default app;

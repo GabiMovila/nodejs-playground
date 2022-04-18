@@ -6,6 +6,16 @@
       "request": "launch",
       "runtimeArgs": ["-r", "ts-node/register"],
       "args": ["${workspaceFolder}/src/server.ts"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Jest Tests",
+      "program": "${workspaceRoot}\\node_modules\\jest\\bin\\jest.js",
+      "args": ["-i"],
+      "internalConsoleOptions": "openOnSessionStart",
+      "outFiles": ["${workspaceRoot}/built/**/*"],
+      "envFile": "${workspaceRoot}/.env"
     }
   ]
 }

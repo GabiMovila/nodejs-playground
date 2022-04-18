@@ -13,7 +13,7 @@ const postCatFact = asyncHandler(
   async (req: express.Request, res: express.Response) => {
     const fact = new Fact(req.body);
     fact.save();
-    res.send(`1 cat fact insterted: ${fact}`);
+    res.send(fact);
   }
 );
 
@@ -25,7 +25,7 @@ const updateCatFact = asyncHandler(
       throw new Error('Fact not found');
     }
     await Fact.findByIdAndUpdate(req.params.id, req.body);
-    res.send(`1 cat fact updated: ${req.body}`);
+    res.send(req.body);
   }
 );
 
@@ -37,7 +37,7 @@ const deleteCatFact = asyncHandler(
       throw new Error('Fact not found');
     }
     await Fact.findByIdAndDelete(req.params.id);
-    res.send(`Deleted fact with ID: ${req.params.id}`);
+    res.send(req.params.id);
   }
 );
 

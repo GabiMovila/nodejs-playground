@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "./built",
+    "outDir": "./build",
     "allowJs": true,
     "module": "CommonJS"
   },
-  "include": ["./", "./built"]
+  "exclude": ["./tests", "./build"]
 }
