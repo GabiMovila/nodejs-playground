@@ -1,57 +1,78 @@
-import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import App from './App';
-import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
 import '@testing-library/jest-dom/extend-expect';
-import exp from 'constants';
+import CatFact from './Models/CatFact';
+import fetchMock from 'jest-fetch-mock';
 
 describe('tests for App component', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
   afterEach(() => {
-    jest.restoreAllMocks();
+    fetchMock.resetMocks();
   });
 
   it('renders refresh button', () => {
     render(<App />);
-    const button = screen.getByText('Refresh');
+    const button = screen.getByTestId('factButton');
     expect(button).toBeInTheDocument();
   });
 
-  it('shows data on button click', async () => {
+  it('shows data on button click with mocked responses', async () => {
     render(<App />);
-    const buttonData = screen.getByText('Refresh');
-    const fakeData = {
-      activity: 'Learn JS',
-      hours: 32,
-      id: 44,
+    const buttonData = screen.getByTestId('factButton');
+    const fakeData: CatFact = {
+      fact: 'Cats are cute',
+      length: 32,
     };
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () => Promise.resolve(fakeData),
-      })
-    ) as jest.Mock;
-    // eslint-disable-next-line testing-library/no-unnecessary-act
-    await act(async () => {
-      userEvent.click(buttonData);
+
+    fetchMock.mockResponseOnce(JSON.stringify(fakeData));
+    fetchMock.mockResponseOnce(JSON.stringify(fakeData));
+    buttonData.click();
+    await waitFor(() => {
+      screen.getByTestId('dataBlock');
     });
+
     const message = screen.getByTestId('dataBlock');
     expect(message).toBeInTheDocument();
-    expect(message.textContent).toEqual(JSON.stringify(fakeData, null, 2));
+    expect(message.textContent).toEqual(JSON.stringify(fakeData.fact, null, 2));
   });
 
-  it('shows error on button click', async () => {
+  it('shows error on button click when first API fails', async () => {
     render(<App />);
-    const buttonData = screen.getByText('Refresh');
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () => Promise.reject('Something went wrong'),
-      })
-    ) as jest.Mock;
-    // eslint-disable-next-line testing-library/no-unnecessary-act
-    await act(async () => {
-      userEvent.click(buttonData);
+    const buttonData = screen.getByTestId('factButton');
+    const errorMessage = 'Dead API';
+    fetchMock.mockRejectOnce(new Error(errorMessage));
+    buttonData.click();
+    await waitFor(() => {
+      screen.getByTestId('errorBlock');
     });
-    const message = screen.getByText('Error: Something went wrong');
+
+    const message = screen.getByTestId('errorBlock');
     expect(message).toBeInTheDocument();
+    expect(message.textContent).toEqual(`${errorMessage}`);
+  });
+
+  it('shows error on button click when second API fails', async () => {
+    render(<App />);
+    const buttonData = screen.getByTestId('factButton');
+    const errorMessage = 'Dead API';
+    const fakeData: CatFact = {
+      fact: 'Cats are cute',
+      length: 32,
+    };
+
+    fetchMock.mockResponseOnce(JSON.stringify(fakeData));
+    fetchMock.mockRejectOnce(new Error(errorMessage));
+
+    buttonData.click();
+    await waitFor(() => {
+      screen.getByTestId('errorBlock');
+    });
+
+    const message = screen.getByTestId('errorBlock');
+    expect(message).toBeInTheDocument();
+    expect(message.textContent).toEqual(`${errorMessage}`);
   });
 });

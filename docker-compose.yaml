@@ -11,3 +11,14 @@ services:
     ports:
       - '3000:3000'
     container_name: frontend-react-container
+
+  mongo:
+    image: ${DOCKER_MIRROR_URL:-docker.io}/mongo:3.6
+    hostname: mongo
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: mongodb
+      MONGO_INITDB_ROOT_USERNAME: mongodb
+      MONGO_INITDB_ROOT_PASSWORD: mongodb
+    restart: unless-stopped
